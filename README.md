@@ -17,7 +17,25 @@
 
 [FastJson](https://mvnrepository.com/search?q=fastjson)
 
+[Spring boot + Mybatis](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
+
+[Spring](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
+
 ##工具
 [Git](https://git-scm.com/download)
 
 [Visual Paradigm](https://www.visual-paradigm.com/cn/)
+
+##Script
+```sql
+CREATE TABLE "USER"(
+    "ID" INT  NOT NULL AUTO_INCREMENT,
+    "ACCOUNT_ID" VARCHAR(100),
+    "NAME" VARCHAR(50),
+    "TOKEN" CHAR(36),
+    "GMT_CREATE" BIGINT,
+    "GMT_MODIFIED" BIGINT
+)
+
+
+```
