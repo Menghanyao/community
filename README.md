@@ -26,6 +26,8 @@
 
 [Visual Paradigm](https://www.visual-paradigm.com/cn/)
 
+[lombok](https://projectlombok.org)
+
 ##Script
 ```sql
 CREATE TABLE "USER"(
