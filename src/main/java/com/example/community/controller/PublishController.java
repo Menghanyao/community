@@ -77,6 +77,9 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
+        question.setViewCount(0);
+        question.setCommentCount(0);
+        question.setLikeCount(0);
         questionMapper.create(question);
         return "redirect:/";
     }
