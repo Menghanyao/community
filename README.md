@@ -1,5 +1,10 @@
 ##萌汉曜の社区
 
+##项目来源
+[Github](https://github.com/codedrinker/community)
+
+[B站视频](https://www.bilibili.com/video/av50200264)
+
 ##资料
 [Spring](https://spring.io/guides)
 
@@ -22,6 +27,8 @@
 [Spring](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
 
 [Thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#setting-attribute-values)
+
+[Spring Dev Tools](https://github.com/codedrinker/community)
 
 ##工具
 [Git](https://git-scm.com/download)
