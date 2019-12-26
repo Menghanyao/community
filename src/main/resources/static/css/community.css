@@ -19,3 +19,7 @@ body {
     font-size: 12px;
     font-weight: normal;
 }
+
+.profile .section {
+    margin-top: 20px;
+}
