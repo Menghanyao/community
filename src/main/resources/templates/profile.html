@@ -28,7 +28,9 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}">快速学spring boot</h4>
+                    <h4 class="media-heading">
+                        <a th:text="${question.title}" th:href="@{'/question/'+${question.id}}"></a>
+                    </h4>
                     <br>
                     <span class="text-desc">
                         作者是：<span th:text="${question.user.getName()}"></span>&nbsp;id是:<span th:text="${question.user.getId()}"></span>&nbsp;，

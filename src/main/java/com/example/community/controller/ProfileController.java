@@ -31,23 +31,29 @@ public class ProfileController {
 
         User user = null;
         Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-            if (user == null) {
-                return "redirect:/";
-            }
-        } else if (cookies == null || cookies.length ==0) {
+//        if (cookies != null && cookies.length != 0) {
+//            for (Cookie cookie : cookies) {
+//                if (cookie.getName().equals("token")) {
+//                    String token = cookie.getValue();
+//                    user = userMapper.findByToken(token);
+//                    if (user != null) {
+//                        request.getSession().setAttribute("user", user);
+//                    }
+//                    break;
+//                }
+//            }
+//            if (user == null) {
+//                return "redirect:/";
+//            }
+//        } else if (cookies == null || cookies.length ==0) {
+//            return "redirect:/";
+//        }
+
+        if (cookies == null || cookies.length ==0) {
             return "redirect:/";
         }
+        user = (User) request.getSession().getAttribute("user");
+
 
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
