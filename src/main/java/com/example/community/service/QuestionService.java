@@ -2,6 +2,8 @@ package com.example.community.service;
 
 import com.example.community.dto.PaginationDTO;
 import com.example.community.dto.QuestionDTO;
+import com.example.community.exception.CustomizeErrorCode;
+import com.example.community.exception.CustomizeException;
 import com.example.community.mapper.QuestionMapper;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.Question;
@@ -86,6 +88,9 @@ public class QuestionService {
     //  根据问题Id跳转到详情页面
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.getById(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         User user = userMapper.findById(question.getCreator());
         BeanUtils.copyProperties(question, questionDTO);
@@ -102,7 +107,10 @@ public class QuestionService {
         } else {
             //  更新
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.update(question);
+            int status = questionMapper.update(question);
+            if (status != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
