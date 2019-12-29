@@ -41,14 +41,33 @@
 
 ##Script
 ```sql
-CREATE TABLE "USER"(
-    "ID" INT  NOT NULL AUTO_INCREMENT,
-    "ACCOUNT_ID" VARCHAR(100),
-    "NAME" VARCHAR(50),
-    "TOKEN" CHAR(36),
-    "GMT_CREATE" BIGINT,
-    "GMT_MODIFIED" BIGINT
-)
-
-
+create table USER
+(
+    ID           INT auto_increment,
+    ACCOUNT_ID   VARCHAR(100),
+    NAME         VARCHAR(50),
+    TOKEN        CHAR(36),
+    GMT_CREATE   BIGINT,
+    GMT_MODIFIED BIGINT,
+    AVATAR_URL   VARCHAR(100),
+    constraint USER_PK
+        primary key (ID)
+);
+```
+```sql
+create table QUESTION
+(
+    ID            INT auto_increment,
+    TITLE         VARCHAR(50),
+    DESCRIPTION   TEXT,
+    GMT_CREATE    BIGINT,
+    GMT_MODIFIED  BIGINT,
+    CREATOR       INT,
+    COMMENT_COUNT INT,
+    VIEW_COUNT    INT,
+    LIKE_COUNT    INT,
+    TAG           VARCHAR(256),
+    constraint QUESTION_PK
+        primary key (ID)
+);
 ```
