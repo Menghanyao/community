@@ -40,6 +40,8 @@
 
 [lombok](https://projectlombok.org)
 
+[JSON editor](http://jsoneditoronline.org/)
+
 ##Script
 ```sql
 create table USER

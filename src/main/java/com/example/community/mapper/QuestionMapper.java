@@ -9,9 +9,9 @@ import java.util.List;
 public interface QuestionMapper {
 
     @Insert("insert into question " +
-            "(title,description,gmt_create,gmt_modified,creator,tag) " +
+            "(title,description,gmt_create,gmt_modified,creator,tag,view_count,comment_count,like_count) " +
             "values " +
-            "(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
+            "(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag},#{viewCount},#{commentCount},#{likeCount})")
     void create(Question question);
 
     @Select("select * from question limit #{offset},#{size}")
@@ -21,14 +21,20 @@ public interface QuestionMapper {
     Integer count();
 
     @Select("select * from question where creator = #{userId} limit #{offset},#{size}")
-    List<Question> listByUserId(@Param(value = "userId") Integer userId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
+    List<Question> listByUserId(@Param(value = "userId") Long userId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 
     @Select("select count(1) from question where creator = #{userId}")
-    Integer countByUserId(@Param(value = "userId") Integer userId);
+    Integer countByUserId(@Param(value = "userId") Long userId);
 
     @Select("select * from question where id = #{id}")
-    Question getById(@Param(value = "id") Integer id);
+    Question getById(@Param(value = "id") Long id);
 
     @Update("update question set title = #{title}, description = #{description}, tag = #{tag}, gmt_modified = #{gmtModified} where id = #{id}")
     int update(Question question);
+
+    @Update("update question set view_count = #{newViewCount} where id = #{updateQuestion.id}")
+    int incViewSQL(Question updateQuestion, @Param(value = "newViewCount") int newViewCount);
+
+    @Update("update question set comment_count = #{newCommentCount} where id = #{updateQuestion.id}")
+    int incCommentSQL(Question updateQuestion, @Param(value = "newCommentCount") int newCommentCount);
 }

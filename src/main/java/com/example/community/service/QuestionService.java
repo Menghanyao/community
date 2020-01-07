@@ -56,7 +56,7 @@ public class QuestionService {
     }
 
     //  显示“我的问题”，根据userId查找该用户的所有提问
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -86,7 +86,7 @@ public class QuestionService {
     }
 
     //  根据问题Id跳转到详情页面
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.getById(id);
         if (question == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -103,6 +103,9 @@ public class QuestionService {
             //  创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
             questionMapper.create(question);
         } else {
             //  更新
@@ -111,6 +114,17 @@ public class QuestionService {
             if (status != 1) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
+        }
+    }
+
+    public void incVIew(Long id) {
+        Question updateQuestion = questionMapper.getById(id);
+        if (updateQuestion == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
+        int status = questionMapper.incViewSQL(updateQuestion, updateQuestion.getViewCount() + 1);
+        if (status != 1) {
+            throw new CustomizeException(CustomizeErrorCode.PLEASE_FLUSH);
         }
     }
 }

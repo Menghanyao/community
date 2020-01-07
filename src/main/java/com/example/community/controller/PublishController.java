@@ -30,7 +30,7 @@ public class PublishController {
 
     //  展示具体内容（供修改）
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id,
+    public String edit(@PathVariable(name = "id") Long id,
                        Model model) {
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title", question.getTitle());
@@ -47,7 +47,7 @@ public class PublishController {
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "id", required = false) Integer id,
+            @RequestParam(value = "id", required = false) Long id,
             HttpServletRequest request,
             Model model) {
 
@@ -91,9 +91,6 @@ public class PublishController {
             return "/publish";
         }
         question.setCreator(user.getId());
-        question.setViewCount(0);
-        question.setCommentCount(0);
-        question.setLikeCount(0);
         //  id是增或改的判断
         question.setId(id);
         questionService.createOrUpdate(question);
