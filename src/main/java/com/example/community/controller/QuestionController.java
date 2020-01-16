@@ -1,5 +1,6 @@
 package com.example.community.controller;
 
+import com.example.community.cache.TagCache;
 import com.example.community.dto.CommentDTO;
 import com.example.community.dto.QuestionDTO;
 import com.example.community.enums.CommentTypeEnum;
@@ -27,10 +28,12 @@ public class QuestionController {
                            Model model) {
 
         QuestionDTO questionDTO = questionService.getById(id);  //  取问题
+        List<QuestionDTO> relatedQuestions = questionService.selectRelated(questionDTO);    //  取相似问题
         List<CommentDTO> comments = commentService.listCommentsByParentIdAndType(id, CommentTypeEnum.QUESTION.getType());    //  取一级评论
         questionService.incVIew(id);    //  累加阅读数
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", comments);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
     }
 }

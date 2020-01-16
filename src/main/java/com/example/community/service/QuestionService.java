@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -50,7 +52,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
-        paginationDTO.setQuestions(questionDTOList);    //  设置本页的问题
+        paginationDTO.setDataList(questionDTOList);    //  设置本页的问题
 
         return paginationDTO;
     }
@@ -81,7 +83,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
         }
 
-        paginationDTO.setQuestions(questionDTOList);    //  设置本页的问题
+        paginationDTO.setDataList(questionDTOList);    //  设置本页的问题
         return paginationDTO;
     }
 
@@ -126,5 +128,23 @@ public class QuestionService {
         if (status != 1) {
             throw new CustomizeException(CustomizeErrorCode.PLEASE_FLUSH);
         }
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        if (queryDTO.getTag().isEmpty()) {
+            return new ArrayList<>();
+        }
+        String[] tags = queryDTO.getTag().split(",");
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questions = questionMapper.listByTag(question.getTag(), question.getId());
+        List<QuestionDTO> collections = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return collections;
     }
 }

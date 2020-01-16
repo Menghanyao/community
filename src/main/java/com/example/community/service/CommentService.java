@@ -2,12 +2,16 @@ package com.example.community.service;
 
 import com.example.community.dto.CommentDTO;
 import com.example.community.enums.CommentTypeEnum;
+import com.example.community.enums.NotificationStatusEnum;
+import com.example.community.enums.NotificationTypeEnum;
 import com.example.community.exception.CustomizeErrorCode;
 import com.example.community.exception.CustomizeException;
 import com.example.community.mapper.CommentMapper;
+import com.example.community.mapper.NotificationMapper;
 import com.example.community.mapper.QuestionMapper;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.Comment;
+import com.example.community.model.Notification;
 import com.example.community.model.Question;
 import com.example.community.model.User;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +34,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Transactional
     public void insert(Comment comment) {
 
@@ -42,6 +49,10 @@ public class CommentService {
             }
             commentMapper.updateCommentCount(dbComment, dbComment.getCommentCount() + 1);
             commentMapper.insert(comment);
+
+            //  添加一条通知
+            createNotify(comment, dbComment.getCommentator(), NotificationTypeEnum.REPLY_COMMENT);
+
         } else {
             //  回复问题
             System.out.println("回复问题");
@@ -51,7 +62,23 @@ public class CommentService {
             }
             commentMapper.insert(comment);
             questionMapper.incCommentSQL(dbQuestion, dbQuestion.getCommentCount() + 1);
+
+            //  添加一条通知
+            createNotify(comment, dbQuestion.getCreator(), NotificationTypeEnum.REPLY_QUESTION);
         }
+    }
+
+
+    //  添加一条通知
+      private void createNotify(Comment comment, Long receiver, NotificationTypeEnum notificationType) {
+        Notification notification = new Notification();
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setOuterId(comment.getParentId());
+        notification.setType(notificationType.getType());
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setGmtCreate(comment.getGmtCreate());
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listCommentsByParentIdAndType(Long parentId, Integer type) {

@@ -111,3 +111,20 @@ function collapseComments(e) {
     }
 
 }
+
+function selectTag(e) {
+    var tag = e.getAttribute("data-tag")
+    var previous = $("#tag").val()
+    if (previous && previous.split(',').indexOf(tag) === -1) {
+        $("#tag").val(previous + ',' + tag)
+    } else {
+        if (previous) {
+        } else {
+            $("#tag").val(tag)
+        }
+    }
+}
+
+function showSelectTag() {
+    $("#select-tag").show()
+}

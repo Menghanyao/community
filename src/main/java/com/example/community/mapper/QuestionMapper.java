@@ -37,4 +37,7 @@ public interface QuestionMapper {
 
     @Update("update question set comment_count = #{newCommentCount} where id = #{updateQuestion.id}")
     int incCommentSQL(Question updateQuestion, @Param(value = "newCommentCount") int newCommentCount);
+
+    @Select("select * from question where tag regexp #{tag} and id != #{id}")
+    List<Question> listByTag(@Param(value = "tag") String tag, @Param(value = "id") Long id);
 }
