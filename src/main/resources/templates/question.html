@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/editormd.preview.min.css">
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/community.js" type="application/javascript"></script>
     <script src="/js/moment.js" type="application/javascript"></script>
-
+    <script src="/js/editormd.min.js" type="application/javascript"></script>
+    <script src="/js/lib/marked.min.js"></script>
+    <script src="/js/lib/prettify.min.js"></script>
 
 </head>
 <body>
@@ -29,7 +32,19 @@
                 阅读数：<span th:text="${question.viewCount}"></span>  |
             </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}"></div>
+                <div id="question-description-markdown-view" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                    <!-- Server-side output Markdown text -->
+                    <textarea style="display:none;" th:text="${question.description}">### Hello world!</textarea>
+                </div>
+                <script type="text/javascript">
+                    $(function() {
+                        var testView = editormd.markdownToHTML("question-description-markdown-view", {
+                            // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+                            // htmlDecode : true,  // Enable / disable HTML tag encode.
+                            // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+                        });
+                    });
+                </script>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments">
                 <!--标签-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
