@@ -124,3 +124,8 @@ body {
 .notification-img {
     padding-top: 20px;
 }
+
+.index-question-description {
+    max-height: 145px;
+    overflow: hidden;
+}

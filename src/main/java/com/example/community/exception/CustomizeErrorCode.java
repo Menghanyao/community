@@ -12,6 +12,7 @@ public enum CustomizeErrorCode implements iCustomizeErrorCode {
     CONTENT_IS_EMPTY(2007, "评论得有点东西"),
     NOT_YOUR_NOTIFICATION(2008, "这条通知不是给你的"),
     NOTIFICATION_NOT_FOUND(2009, "这条通知不见了"),
+    FILE_UPLOAD_FAILED(2010, "图片上传失败"),
 
     ;
 
