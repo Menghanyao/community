@@ -1,3 +1,40 @@
+// 点赞
+function likeComment(e) {
+    var parentId = e.getAttribute("data-id")
+    var currentLikeCount = e.getAttribute("data-likeCount")
+    console.log(parentId,currentLikeCount)
+    $.ajax({
+        type: "POST",
+        url: "/comment",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "parentId": parentId,
+            "likeCount": currentLikeCount,
+            "type": 3
+        }),
+        success: function (response) {
+            console.log(response);
+            if (response.code == 200) {
+                $("#comment_section").hide();
+                window.location.reload();
+            } else {
+                console.log("failure!! code：", response.code ,"message: ", response.message);
+                if (response.code == 2003) {
+                    //  未登录
+                    var isAccepted = confirm(response.message);
+                    if (isAccepted) {
+                        window.open("https://github.com/login/oauth/authorize?client_id=ae4e022db2a1918dbc40&redirect_uri=http://localhost:8888/callback&scope=user&state=1")
+                        window.localStorage.setItem("closeable", true);
+                    }
+                } else {
+                    alert(response.message);
+                }
+            }
+        },
+        dataType: "json"
+    })
+}
+
 // 提交一级评论
 function comment2question() {
     var questionId = $("#question_id").val();

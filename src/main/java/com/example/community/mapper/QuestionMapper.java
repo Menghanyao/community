@@ -40,4 +40,10 @@ public interface QuestionMapper {
 
     @Select("select * from question where tag regexp #{tag} and id != #{id}")
     List<Question> listByTag(@Param(value = "tag") String tag, @Param(value = "id") Long id);
+
+    @Select("select count(1) from question where title regexp #{search}")
+    Integer searchCount(@Param(value = "search") String search);
+
+    @Select("select * from question where title regexp #{search} limit #{offset},#{size}")
+    List<Question> searchList(@Param(value = "search") String search, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 }

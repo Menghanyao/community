@@ -36,6 +36,13 @@ public class CommentController {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
 
+        if (commentCreateDTO.getType() == 3) {
+            //  3是点赞呀
+            System.out.println("likeCount = " + commentCreateDTO.getLikeCount() + ", parentId = " + commentCreateDTO.getParentId());
+            commentMapper.addLikeCount(commentCreateDTO.getParentId(), commentCreateDTO.getLikeCount() + 1);
+            return ResultDTO.okOf();
+        }
+
         if (commentCreateDTO.getContent() == null || commentCreateDTO.getContent().trim().equals("") || commentCreateDTO == null) {
             throw new CustomizeException(CustomizeErrorCode.CONTENT_IS_EMPTY);
         }
@@ -47,6 +54,7 @@ public class CommentController {
         if (commentCreateDTO.getType() == null || !CommentTypeEnum.isExist(commentCreateDTO.getType())) {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
         }
+
 
         Comment comment = new Comment();
         comment.setParentId(commentCreateDTO.getParentId());

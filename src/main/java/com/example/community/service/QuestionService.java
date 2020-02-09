@@ -27,7 +27,13 @@ public class QuestionService {
     UserMapper userMapper;
 
     // 显示在首页的内容
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search, Integer page, Integer size) {
+
+        //  搜索关键词
+        if (!search.isEmpty()) {
+            PaginationDTO paginationDTO = searchKeyword(search, page, size);
+            return paginationDTO;
+        }
 
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -42,6 +48,41 @@ public class QuestionService {
         //  offset是数据库查询的偏移量
         Integer offset = size * (page - 1);
         List<Question> questions = questionMapper.list(offset, size);   //查询对应页码的帖子
+
+        //  for循环为每条帖子赋予作者信息
+        for (Question question : questions) {
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
+        }
+
+        paginationDTO.setDataList(questionDTOList);    //  设置本页的问题
+
+        return paginationDTO;
+    }
+
+    //    返回搜索结果
+    private PaginationDTO searchKeyword(String search, Integer page, Integer size) {
+
+        //关键词分片
+        String[] tags = search.split(" ");
+        search = Arrays.stream(tags).collect(Collectors.joining("|"));
+
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        PaginationDTO paginationDTO = new PaginationDTO();
+        //  如果只有4页，你要查第5页，应返回第4页
+        Integer totalCount = questionMapper.searchCount(search);
+        System.out.println("含关键词的totalCount: " + totalCount);
+        paginationDTO.setPagination(totalCount, page, size);    //  设置本页的分页条,主要为了设置totalPage
+        if (page < 1) { page = 1; }
+        if (page > paginationDTO.getTotalPage()) { page = paginationDTO.getTotalPage(); }
+
+        paginationDTO.setPagination(totalCount, page, size);    //  设置本页的分页条,主要为了设置totalPage
+        //  offset是数据库查询的偏移量
+        Integer offset = size * (page - 1);
+        List<Question> questions = questionMapper.searchList(search, offset, size);   //查询对应页码的帖子
 
         //  for循环为每条帖子赋予作者信息
         for (Question question : questions) {

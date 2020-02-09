@@ -88,7 +88,12 @@
                             </h5>
                             <div th:text="${comment.content}">我是回复内容</div>
                             <div class="menu">
-                                <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                <span class="glyphicon glyphicon-thumbs-up icon"
+                                      th:data-id="${comment.id}"
+                                      th:data-likeCount="${comment.likeCount}"
+                                      onclick="likeComment(this)"
+                                      th:id="${'like-icon-'+comment.id}"
+                                      th:text="${comment.likeCount}"></span>
                                 <span class="glyphicon glyphicon-comment icon"
                                       th:data-id="${comment.id}"
                                       onclick="collapseComments(this)"
@@ -127,12 +132,12 @@
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-rounded"
-                                 th:src="${question.user.avatarUrl}">
+                                 th:src="${session.user != null ? session.user.avatarUrl : '/images/default-avatar.png'}">
                         </a>
                     </div>
                     <div class="media-body">
                         <h5 class="media-heading">
-                            <span th:text="${question.user.getName()}"></span>
+                            <span th:text="${session.user != null ? session.user.name : '匿名用户'}"></span>
                         </h5>
                     </div>
                 </div>
@@ -175,5 +180,6 @@
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>

@@ -71,6 +71,10 @@ public class CommentService {
 
     //  添加一条通知
       private void createNotify(Comment comment, Long receiver, NotificationTypeEnum notificationType) {
+        if (receiver == comment.getCommentator()) {
+
+            return;
+        }
         Notification notification = new Notification();
         notification.setNotifier(comment.getCommentator());
         notification.setReceiver(receiver);
